@@ -29,5 +29,5 @@ If your work uses MultiMAP, please cite the [paper](https://www.biorxiv.org/cont
 ## Contact
 
 Mika Sarkin Jain - mikasarkinjain@gmail.com \
-Mirjana Efremova - me5@sanger.ac.uk \
+Mirjana Efremova -  m.efremova@qmul.ac.uk \
 Sarah Teichmann - st9@sanger.ac.uk
