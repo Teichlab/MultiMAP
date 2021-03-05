@@ -86,44 +86,44 @@ def MultiMAP_Integration(adatas, use_reps, scale=True, **kwargs):
 		``None``, defaults to ``log2(n_neighbors)``.
 	The following parameter definitions are sourced from UMAP 0.5.1:
 	
-	n_epochs: int (optional, default None)
+	n_epochs : int (optional, default None)
 		The number of training epochs to be used in optimizing the
 		low dimensional embedding. Larger values result in more accurate
 		embeddings. If None is specified a value will be selected based on
 		the size of the input dataset (200 for large datasets, 500 for small).
-	init: string (optional, default 'spectral')
+	init : string (optional, default 'spectral')
 		How to initialize the low dimensional embedding. Options are:
 			* 'spectral': use a spectral embedding of the fuzzy 1-skeleton
 			* 'random': assign initial embedding positions at random.
 			* A numpy array of initial embedding positions.
-	min_dist: float (optional, default 0.1)
+	min_dist : float (optional, default 0.1)
 		The effective minimum distance between embedded points. Smaller values
 		will result in a more clustered/clumped embedding where nearby points
 		on the manifold are drawn closer together, while larger values will
 		result on a more even dispersal of points. The value should be set
 		relative to the ``spread`` value, which determines the scale at which
 		embedded points will be spread out.
-	spread: float (optional, default 1.0)
+	spread : float (optional, default 1.0)
 		The effective scale of embedded points. In combination with ``min_dist``
 		this determines how clustered/clumped the embedded points are.
-	set_op_mix_ratio: float (optional, default 1.0)
+	set_op_mix_ratio : float (optional, default 1.0)
 		Interpolate between (fuzzy) union and intersection as the set operation
 		used to combine local fuzzy simplicial sets to obtain a global fuzzy
 		simplicial sets. Both fuzzy set operations use the product t-norm.
 		The value of this parameter should be between 0.0 and 1.0; a value of
 		1.0 will use a pure fuzzy union, while 0.0 will use a pure fuzzy
 		intersection.
-	local_connectivity: int (optional, default 1)
+	local_connectivity : int (optional, default 1)
 		The local connectivity required -- i.e. the number of nearest
 		neighbors that should be assumed to be connected at a local level.
 		The higher this value the more connected the manifold becomes
 		locally. In practice this should be not more than the local intrinsic
 		dimension of the manifold.
-	a: float (optional, default None)
+	a : float (optional, default None)
 		More specific parameters controlling the embedding. If None these
 		values are set automatically as determined by ``min_dist`` and
 		``spread``.
-	b: float (optional, default None)
+	b : float (optional, default None)
 		More specific parameters controlling the embedding. If None these
 		values are set automatically as determined by ``min_dist`` and
 		``spread``.

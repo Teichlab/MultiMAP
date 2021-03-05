@@ -18,8 +18,8 @@ import warnings
 
 
 
-INT32_MIN = np.iinfo(np.int32).min + 1
-INT32_MAX = np.iinfo(np.int32).max - 1
+#INT32_MIN = np.iinfo(np.int32).min + 1
+#INT32_MAX = np.iinfo(np.int32).max - 1
 
 
 
@@ -2203,8 +2203,8 @@ except ImportError:
 
 
 
-INT32_MIN = np.iinfo(np.int32).min + 1
-INT32_MAX = np.iinfo(np.int32).max - 1
+#INT32_MIN = np.iinfo(np.int32).min + 1
+#INT32_MAX = np.iinfo(np.int32).max - 1
 
 SMOOTH_K_TOLERANCE = 1e-5
 MIN_K_DIST_SCALE = 1e-3
@@ -2254,7 +2254,7 @@ def nearest_neighbors(
             angular = True
 
         rng_state = random_state.randint(
-            INT32_MIN, INT32_MAX, 3
+            np.iinfo(np.int32).min + 1, np.iinfo(np.int32).max - 1, 3
         ).astype(np.int64)
 
         if scipy.sparse.isspmatrix_csr(X):
@@ -3140,7 +3140,7 @@ def optimize_layout(
                     epochs_per_sample[i],
                     a,
                     b,
-                    np.random.RandomState(random_state).randint(INT32_MIN, INT32_MAX, 3).astype(np.int64),
+                    np.random.RandomState(random_state).randint(np.iinfo(np.int32).min + 1, np.iinfo(np.int32).max - 1, 3).astype(np.int64),
                     gamma,
                     dim,
                     move_other,
@@ -3163,7 +3163,7 @@ def optimize_layout(
                     joint_epochs_per_sample[k],
                     a,
                     b,
-                    np.random.RandomState(random_state).randint(INT32_MIN, INT32_MAX, 3).astype(np.int64),
+                    np.random.RandomState(random_state).randint(np.iinfo(np.int32).min + 1, np.iinfo(np.int32).max - 1, 3).astype(np.int64),
                     gamma,
                     dim,
                     move_other,
