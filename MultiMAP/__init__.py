@@ -71,7 +71,61 @@ def MultiMAP_Integration(adatas, use_reps, scale=True, **kwargs):
 	scale : ``bool``, optional (default: ``True``)
 		Whether to scale the data to N(0,1) on a per-dataset basis prior to computing the 
 		cross-dataset PCAs. Improves integration.
-	TODO: someone who speaks the tool should write up the remaining arguments in a similar style
+	n_neighbors : ``int`` or ``None``, optional (default: ``None``)
+		The number of neighbours for each node (data point) in the MultiGraph. If ``None``, 
+		defaults to 15 times the number of input datasets.
+	n_components : ``int`` (default: 2)
+		The number of dimensions of the MultiMAP embedding.
+	strengths: ``list`` of ``float`` or ``None`` (default: ``None``)
+		The relative contribution of each dataset to the layout of the embedding. The 
+		higher the strength the higher the weighting of its cross entropy in the layout loss. 
+		If provided, needs to be a list with one 0-1 value per dataset; if ``None``, defaults 
+		to 0.5 for each dataset.
+	cardinality : ``float`` or ``None``, optional (default: ``None``)
+		The target sum of the connectivities of each neighbourhood in the MultiGraph. If 
+		``None``, defaults to ``log2(n_neighbors)``.
+	The following parameter definitions are sourced from UMAP 0.5.1:
+	n_epochs: int (optional, default None)
+		The number of training epochs to be used in optimizing the
+		low dimensional embedding. Larger values result in more accurate
+		embeddings. If None is specified a value will be selected based on
+		the size of the input dataset (200 for large datasets, 500 for small).
+	init: string (optional, default 'spectral')
+		How to initialize the low dimensional embedding. Options are:
+			* 'spectral': use a spectral embedding of the fuzzy 1-skeleton
+			* 'random': assign initial embedding positions at random.
+			* A numpy array of initial embedding positions.
+	min_dist: float (optional, default 0.1)
+		The effective minimum distance between embedded points. Smaller values
+		will result in a more clustered/clumped embedding where nearby points
+		on the manifold are drawn closer together, while larger values will
+		result on a more even dispersal of points. The value should be set
+		relative to the ``spread`` value, which determines the scale at which
+		embedded points will be spread out.
+	spread: float (optional, default 1.0)
+		The effective scale of embedded points. In combination with ``min_dist``
+		this determines how clustered/clumped the embedded points are.
+	set_op_mix_ratio: float (optional, default 1.0)
+		Interpolate between (fuzzy) union and intersection as the set operation
+		used to combine local fuzzy simplicial sets to obtain a global fuzzy
+		simplicial sets. Both fuzzy set operations use the product t-norm.
+		The value of this parameter should be between 0.0 and 1.0; a value of
+		1.0 will use a pure fuzzy union, while 0.0 will use a pure fuzzy
+		intersection.
+	local_connectivity: int (optional, default 1)
+		The local connectivity required -- i.e. the number of nearest
+		neighbors that should be assumed to be connected at a local level.
+		The higher this value the more connected the manifold becomes
+		locally. In practice this should be not more than the local intrinsic
+		dimension of the manifold.
+	a: float (optional, default None)
+		More specific parameters controlling the embedding. If None these
+		values are set automatically as determined by ``min_dist`` and
+		``spread``.
+	b: float (optional, default None)
+		More specific parameters controlling the embedding. If None these
+		values are set automatically as determined by ``min_dist`` and
+		``spread``.
 	'''
 	
 	#the main thing will be pulling out the various subsets of the adatas, sticking them 
@@ -122,7 +176,7 @@ def MultiMAP_Integration(adatas, use_reps, scale=True, **kwargs):
 	adata = anndata.concat(adatas, join='outer')
 	adata.obsm['X_multimap'] = embed
 	#the graph is weighted, the higher the better, 1 best. sounds similar to connectivities
-	#TODO: slot Mika's take on the distances into .obsp['distances']
+	#TODO: slot distances into .obsp['distances']
 	adata.obsp['connectivities'] = connectivities
 	return adata
 
@@ -151,7 +205,6 @@ def MultiMAP_Batch(adata, batch_key='batch', scale=True, dimred_func=None, rep_n
 	rep_name : ``str``, optional (default: "X_pca")
 		The ``.obsm`` field that the dimensionality reduction function stores its output under.
 	All other arguments as described in ``MultiMAP_Integration()``.
-	TODO: This bit at the end might need rewording once that docstring gets written
 	'''
 	
 	#as promised in the docstring, set dimred_func to scanpy PCA if not provided
