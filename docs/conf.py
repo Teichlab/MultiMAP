@@ -13,12 +13,12 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-autodoc_mock_imports = ['numpy','scipy','numba','scikit-learn','umap-learn','annoy']
+
 
 # -- Project information -----------------------------------------------------
 
 project = 'MultiMAP'
-copyright = '2020, Mika Sarkin Jain'
+copyright = '2020-2021, Mika Sarkin Jain'
 author = 'Mika Sarkin Jain'
 
 # The full version, including alpha/beta/rc tags
