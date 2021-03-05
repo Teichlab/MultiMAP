@@ -84,8 +84,6 @@ def MultiMAP_Integration(adatas, use_reps, scale=True, **kwargs):
 	cardinality : ``float`` or ``None``, optional (default: ``None``)
 		The target sum of the connectivities of each neighbourhood in the MultiGraph. If 
 		``None``, defaults to ``log2(n_neighbors)``.
-	The following parameter definitions are sourced from UMAP 0.5.1:
-	
 	n_epochs : int (optional, default None)
 		The number of training epochs to be used in optimizing the
 		low dimensional embedding. Larger values result in more accurate
