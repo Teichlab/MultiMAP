@@ -6,13 +6,17 @@
 
 ## Installation
 
-``` bash 
-$ git clone https://github.com/Teichlab/MultiMAP.git
+We're working on getting the package on `pip` ASAP. Meanwhile enjoy this placeholder solution!
+
+```
+git clone https://github.com/Teichlab/MultiMAP.git
+cd MultiMAP
+pip3 install .
 ```
 
 ## Usage
 
-For a tutorial with different use cases, please see the `examples` directory of this repo.
+A tutorial covering both RNA-ATAC integration and RNA-Seq batch correction use can be found [here](https://nbviewer.jupyter.org/github/Teichlab/MultiMAP/blob/master/examples/tutorial.ipynb).
 
 ## Citation
 
