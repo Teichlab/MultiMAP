@@ -6,4 +6,4 @@
 MultiMAP
 
 .. automodule:: MultiMAP
-   :members: RunMultiMAP, TFIDF_LSI
+   :members: MultiMAP_Integration, MultiMAP_Batch, TFIDF_LSI
