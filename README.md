@@ -7,7 +7,7 @@
 ## Installation
 
 ``` bash 
-$ git clone https://github.com/mikasarkinjain/MultiMAP.git
+$ git clone https://github.com/Teichlab/MultiMAP.git
 ```
 
 ## Usage
