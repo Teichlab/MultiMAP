@@ -4,6 +4,7 @@
    contain the root `toctree` directive.
 
 MultiMAP
+========
 
 .. automodule:: MultiMAP
    :members: MultiMAP_Integration, MultiMAP_Batch, TFIDF_LSI

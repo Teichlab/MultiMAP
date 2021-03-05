@@ -14,9 +14,11 @@ cd MultiMAP
 pip3 install .
 ```
 
-## Usage
+## Usage and Documentation
 
 A tutorial covering both RNA-ATAC integration and RNA-Seq batch correction use can be found [here](https://nbviewer.jupyter.org/github/Teichlab/MultiMAP/blob/master/examples/tutorial.ipynb).
+
+Documentation of the function parameters can be found on [ReadTheDocs](https://multimap.readthedocs.io/en/latest/).
 
 ## Citation
 
