@@ -26,7 +26,8 @@ If your work uses MultiMAP, please cite the [paper](https://www.biorxiv.org/cont
 
 	@article{sarkinjain2021multimap,
 	  title={MultiMAP: Dimensionality Reduction and Integration of Multimodal Data},
-	  author={Sarkin Jain, Mika and Dominguez Conde, Cecilia and Polanski, Krzysztof and Chen, Xi and Park, Jongeun and Botting, Rachel and Stephenson, Emily  and Haniffa, Muzlifah and Lamacraft, Austen and Efremova, Mirjana and Teichmann, Sarah},
+	  author={Sarkin Jain, Mika and Dominguez Conde, Cecilia and Polanski, Krzysztof and Chen, Xi and Park, Jongeun and Botting, Rachel 
+	  and Stephenson, Emily  and Haniffa, Muzlifah and Lamacraft, Austen and Efremova, Mirjana and Teichmann, Sarah},
 	  doi={https://doi.org/10.1101/2021.02.16.431421},
 	  journal={BioRxiv},
 	  year={2021}
