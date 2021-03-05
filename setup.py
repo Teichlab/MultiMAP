@@ -4,7 +4,7 @@ setup(
 	name='MultiMAP',
 	version='0.0.1',
 	description='MultiMAP',
-	url='https://github.com/mikasarkinjain/MultiMAP',
+	url='https://github.com/Teichlab/MultiMAP',
 	packages=find_packages(exclude=['docs', 'examples']),
 	install_requires=['numpy','scipy','numba','scikit-learn','umap-learn','annoy'],
 	author='Mika Sarkin Jain',
