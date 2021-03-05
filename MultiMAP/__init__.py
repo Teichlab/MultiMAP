@@ -84,6 +84,7 @@ def MultiMAP_Integration(adatas, use_reps, scale=True, **kwargs):
 	cardinality : ``float`` or ``None``, optional (default: ``None``)
 		The target sum of the connectivities of each neighbourhood in the MultiGraph. If 
 		``None``, defaults to ``log2(n_neighbors)``.
+	
 	The following parameter definitions are sourced from UMAP 0.5.1:
 	
 	n_epochs : int (optional, default None)
@@ -205,6 +206,7 @@ def MultiMAP_Batch(adata, batch_key='batch', scale=True, dimred_func=None, rep_n
 		into ``.obsm``. If ``None``, ``scanpy.tl.pca()`` will be used.
 	rep_name : ``str``, optional (default: "X_pca")
 		The ``.obsm`` field that the dimensionality reduction function stores its output under.
+	
 	All other arguments as described in ``MultiMAP_Integration()``.
 	'''
 	
