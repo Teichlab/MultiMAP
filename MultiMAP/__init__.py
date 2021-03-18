@@ -171,7 +171,7 @@ def MultiMAP_Integration(adatas, use_reps, scale=True, **kwargs):
 	
 	#and with that, we're now truly free to call the MultiMAP functions
 	#TODO: catch another argument once Mika distances appear
-	embed, connectivities = MultiMAP(Xs=Xs, joint=joint, **kwargs)
+	embed, connectivities, params = MultiMAP(Xs=Xs, joint=joint, **kwargs)
 	
 	#make one happy collapsed object and shove the stuff in correct places
 	#outer join to capture as much gene information as possible for annotation
@@ -180,6 +180,12 @@ def MultiMAP_Integration(adatas, use_reps, scale=True, **kwargs):
 	#the graph is weighted, the higher the better, 1 best. sounds similar to connectivities
 	#TODO: slot distances into .obsp['distances']
 	adata.obsp['connectivities'] = connectivities
+	#set up .uns['neighbors'], setting method to umap as these are connectivities
+	adata.uns['neighbors'] = {}
+	adata.uns['neighbors']['params'] = params
+	adata.uns['neighbors']['params']['method'] = 'umap'
+	adata.uns['neighbors']['distances_key'] = 'distances'
+	adata.uns['neighbors']['connectivities_key'] = 'connectivities'
 	return adata
 
 def MultiMAP_Batch(adata, batch_key='batch', scale=True, dimred_func=None, rep_name='X_pca', **kwargs):
@@ -239,3 +245,4 @@ def MultiMAP_Batch(adata, batch_key='batch', scale=True, dimred_func=None, rep_n
 	adata.obsm['X_multimap'] = mmp.obsm['X_multimap']
 	#TODO: catch distances once those are generated
 	adata.obsp['connectivities'] = mmp.obsp['connectivities']
+	adata.uns['neighbors'] = mmp.uns['neighbors']

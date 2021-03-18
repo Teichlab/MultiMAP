@@ -3429,9 +3429,25 @@ def MultiMAP(Xs,
     if not verbose:
         warnings.resetwarnings()
     
-    #return an embedding/graph tuple
+    #set up parameter output
+    params = {'n_neighbors': n_neighbors,
+              'metric': metrics[0],
+              'multimap': {'cardinality': cardinality,
+                           'set_op_mix_ratio': set_op_mix_ratio,
+                           'local_connectivity': local_connectivity,
+                           'n_components': n_components,
+                           'spread': spread,
+                           'min_dist': min_dist,
+                           'init': init,
+                           'n_epochs': n_epochs,
+                           'a': a,
+                           'b': b,
+                           'strengths': strengths,
+                           'random_state': random_state}}
+    
+    #return an embedding/graph/parameters tuple
     #TODO: add the distances graph to this once it exists
-    return (np.concatenate(embeddings), full_graph)
+    return (np.concatenate(embeddings), full_graph, params)
 
 import sklearn
 from sklearn.feature_extraction.text import TfidfTransformer
