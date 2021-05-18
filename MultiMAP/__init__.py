@@ -1,4 +1,3 @@
-from itertools import chain, combinations
 import scipy
 import numpy as np
 from MultiMAP.matrix import MultiGraph, MultiMAP, tfidf
@@ -11,19 +10,6 @@ try:
 	import scanpy as sc
 except ImportError:
 	pass
-
-def powerset(iterable, minlen=0):
-	'''
-	A function to get all of the subsets of a given set
-	
-	Input:
-		- iterable - the set to find subsets for
-		- minlen - the minimum subset size to return
-	
-	Returns an itertools.chain with tuples of the subsets
-	'''
-	s = list(iterable)
-	return chain.from_iterable(combinations(s, r) for r in range(minlen, len(s)+1))
 
 def TFIDF_LSI(adata, n_comps=50, binarize=True, random_state=0):
 	'''
@@ -134,7 +120,6 @@ def MultiMAP_Integration(adatas, use_reps, scale=True, **kwargs):
 	#together, running joint PCAs, and then splitting up the joint PCAs into datasets of 
 	#origin. to do so, let's introduce a helper .obs column in copied versions of adatas
 	flagged = []
-	same_genes = True
 	for i, adata in enumerate(adatas):
 		flagged.append(adata.copy())
 		#while we're at it, may as well potentially scale our data copy
@@ -145,23 +130,24 @@ def MultiMAP_Integration(adatas, use_reps, scale=True, **kwargs):
 	#MultiMAP wants the shared PCAs delivered as a dictionary, with the subset indices 
 	#tupled up as a key. let's make that then
 	joint = {}
-	#we just want subsets 2 or bigger
-	for subset in powerset(np.arange(len(flagged)), 2):
-		#so you can't subset lists by many indices, and a list of AnnDatas doesn't like 
-		#the idea of becoming a np.array... engage clumsy resolution!
-		subflag = []
-		for i in subset:
-			subflag.append(flagged[i])
-		#collapse into a single object and run a PCA
-		adata = anndata.concat(subflag, join='inner')
-		sc.pp.pca(adata)
-		#store the results in joint, which involves some further acrobatics
-		joint[subset] = []
-		#extract the coordinates for this particular element in the original list, using 
-		#the multimap_index .obs column we created before. handy!
-		for i in subset:
-			asub = adata[adata.obs['multimap_index'] == i]
-			joint[subset].append(asub.obsm['X_pca'])
+	#process all dataset pairs
+	for ind1 in np.arange(len(flagged)-1):
+		for ind2 in np.arange(ind1+1, len(flagged)):
+			subset = (ind1, ind2)
+			#collapse into a single object and run a PCA
+			adata = flagged[ind1].concatenate(flagged[ind2], join='inner')
+			sc.pp.pca(adata)
+			#preserve space by deleting the intermediate object and just keeping its PCA
+			#and multimap index thing
+			X_pca = adata.obsm['X_pca'].copy()
+			multimap_index = adata.obs['multimap_index'].values
+			del adata
+			#store the results in joint, which involves some further acrobatics
+			joint[subset] = []
+			#extract the coordinates for this particular element in the original list, using 
+			#the multimap_index .obs column we created before. handy!
+			for i in subset:
+				joint[subset].append(X_pca[multimap_index == i, :])
 	
 	#with the joint prepped, we just need to extract the primary dimensionality reductions 
 	#and we're good to go here
