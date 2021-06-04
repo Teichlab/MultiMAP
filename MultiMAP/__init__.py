@@ -109,6 +109,10 @@ def Integration(adatas, use_reps, scale=True, embedding=True, **kwargs):
 	scale : ``bool``, optional (default: ``True``)
 		Whether to scale the data to N(0,1) on a per-dataset basis prior to computing the 
 		cross-dataset PCAs. Improves integration.
+	embedding : ``bool``, optional (default: ``True``)
+		Whether to compute the MultiMAP embedding. If ``False``, will just return the graph,
+		which can be used to compute a regular UMAP. This can produce a manifold quicker,
+		but at the cost of accuracy.
 	n_neighbors : ``int`` or ``None``, optional (default: ``None``)
 		The number of neighbours for each node (data point) in the MultiGraph. If ``None``, 
 		defaults to 15 times the number of input datasets.
@@ -219,7 +223,7 @@ def Batch(adata, batch_key='batch', scale=True, embedding=True, dimred_func=None
 	embedding : ``bool``, optional (default: ``True``)
 		Whether to compute the MultiMAP embedding. If ``False``, will just return the graph,
 		which can be used to compute a regular UMAP. This can produce a manifold quicker,
-		but at the cost of 
+		but at the cost of accuracy.
 	dimred_func : function or ``None``, optional (default: ``None``)
 		The function to use to compute dimensionality reduction on a per-dataset basis. Must 
 		accept an ``AnnData`` on input and modify it by inserting its dimensionality reduction 
