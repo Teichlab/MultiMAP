@@ -3393,8 +3393,26 @@ def MultiMAP(Xs,
         verbose=False
     )
 
+    #set up parameter output
+    params = {'n_neighbors': n_neighbors,
+              'metric': metrics[0],
+              'multimap': {'cardinality': cardinality,
+                           'set_op_mix_ratio': set_op_mix_ratio,
+                           'local_connectivity': local_connectivity,
+                           'n_components': n_components,
+                           'spread': spread,
+                           'min_dist': min_dist,
+                           'init': init,
+                           'n_epochs': n_epochs,
+                           'a': a,
+                           'b': b,
+                           'strengths': strengths,
+                           'random_state': random_state}}
+
+    #return parameter and graph tuple
+    #TODO: add the distances graph to this once it exists
     if graph_only:
-        return full_graph
+        return (params, full_graph)
 
     if verbose:
         print("Initializing embedding ...")
@@ -3429,25 +3447,9 @@ def MultiMAP(Xs,
     if not verbose:
         warnings.resetwarnings()
     
-    #set up parameter output
-    params = {'n_neighbors': n_neighbors,
-              'metric': metrics[0],
-              'multimap': {'cardinality': cardinality,
-                           'set_op_mix_ratio': set_op_mix_ratio,
-                           'local_connectivity': local_connectivity,
-                           'n_components': n_components,
-                           'spread': spread,
-                           'min_dist': min_dist,
-                           'init': init,
-                           'n_epochs': n_epochs,
-                           'a': a,
-                           'b': b,
-                           'strengths': strengths,
-                           'random_state': random_state}}
-    
     #return an embedding/graph/parameters tuple
     #TODO: add the distances graph to this once it exists
-    return (np.concatenate(embeddings), full_graph, params)
+    return (params, full_graph, np.concatenate(embeddings))
 
 import sklearn
 from sklearn.feature_extraction.text import TfidfTransformer
