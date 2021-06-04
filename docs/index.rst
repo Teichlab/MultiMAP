@@ -7,4 +7,4 @@ MultiMAP
 ========
 
 .. automodule:: MultiMAP
-   :members: MultiMAP_Integration, MultiMAP_Batch, TFIDF_LSI
+   :members: Integration, Batch, TFIDF_LSI
