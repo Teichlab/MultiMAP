@@ -3466,9 +3466,10 @@ def MultiMAP(Xs,
     return (params, full_graph, np.concatenate(embeddings))
 
 import sklearn
-from sklearn.feature_extraction.text import TfidfTransformer
 
 def tfidf(X, n_components, binarize=True, random_state=0):
+    from sklearn.feature_extraction.text import TfidfTransformer
+    
     sc_count = np.copy(X)
     if binarize:
         sc_count = np.where(sc_count < 1, sc_count, 1)
