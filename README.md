@@ -16,6 +16,11 @@ pip3 install .
 
 ## Usage and Documentation
 
+MultiMAP offers two functions accepting AnnData objects on input:
+	- `MultiMAP.Integration()` expects a list of one AnnData per dataset, with the desired dimensionality reduction precomputed and stored in `.obsm`. This allows for refining the initial dimensionality reduction, e.g. if wishing to use `TFIDF_LSI` for ATAC data and PCA for RNA data.
+	- `MultiMAP.Batch()` expects a single AnnData object with the dataset information stored in an `.obs` column. This allows for convenient integration with minimal preparation if all datasets can be treated with the same dimensionality reduction.
+There's also an AnnData-independent `MultiMAP.matrix.MultiMAP()` function which operates directly on dimensionality reduction matrices.
+
 A tutorial covering both RNA-ATAC integration and RNA-Seq batch correction use can be found [here](https://nbviewer.jupyter.org/github/Teichlab/MultiMAP/blob/master/examples/tutorial.ipynb).
 
 Documentation of the function parameters can be found on [ReadTheDocs](https://multimap.readthedocs.io/en/latest/).
