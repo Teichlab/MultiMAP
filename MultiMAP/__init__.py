@@ -50,7 +50,7 @@ def Wrapper(flagged, use_reps, embedding, **kwargs):
 		matching the object's index in the list. Both ``Integrate()`` and ``Batch()`` make 
 		these.
 	
-	All other arguments as described in ``Integration()``.
+	All other arguments as described in ``MultiMAP.Integration()``.
 	'''
 	#MultiMAP wants the shared PCAs delivered as a dictionary, with the subset indices 
 	#tupled up as a key. let's make that then

@@ -8,3 +8,6 @@ MultiMAP
 
 .. automodule:: MultiMAP
    :members: Integration, Batch, TFIDF_LSI
+
+.. automodule:: MultiMAP.matrix
+   :members: MultiMAP

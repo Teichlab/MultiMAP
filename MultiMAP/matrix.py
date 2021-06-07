@@ -3309,7 +3309,21 @@ def MultiMAP(Xs,
 
              graph_only=False,
             ):
+    '''
+    Run MultiMAP on a collection of dimensionality reduction matrices. Returns a ``(parameters, 
+    neighbor_graph, embedding)`` tuple, with the embedding optionally skipped if ``graph_only=True``.
     
+    Input
+    -----
+    Xs : list of ``np.array``
+        The dimensionality reductions of the datasets to integrate, observations as rows.
+    joint : dict of ``np.array``
+        The joint dimensionality reductions generated for all pair combinations of the input 
+        datasets. The keys are to be two-integer tuples, specifying the indices of the two
+        datasets in ``Xs``
+    graph_only : ``bool``, optional (default: ``False``)
+        If ``True``, skip producing the embedding and only return the neighbour graph.
+    '''
     
     #turn off warnings if we're not verbose
     if not verbose:

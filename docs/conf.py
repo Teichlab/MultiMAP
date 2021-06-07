@@ -13,7 +13,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-autodoc_mock_imports = ['MultiMAP.matrix','anndata','scanpy','numpy','scipy']
+autodoc_mock_imports = ['anndata','scanpy']
 
 # -- Project information -----------------------------------------------------
 
