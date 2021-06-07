@@ -3323,6 +3323,12 @@ def MultiMAP(Xs,
         datasets in ``Xs``
     graph_only : ``bool``, optional (default: ``False``)
         If ``True``, skip producing the embedding and only return the neighbour graph.
+    
+    For three input datasets A, B, C:
+    >>> Xs = [DR_A, DR_B, DR_C]
+    >>> joint = {(0,1):DR_AB, (0,2):DR_AC, (1,2):DR_BC}
+    
+    All other arguments as described in ``MultiMAP.Integration()``.
     '''
     
     #turn off warnings if we're not verbose
