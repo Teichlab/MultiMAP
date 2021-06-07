@@ -1,6 +1,6 @@
 import scipy
 import numpy as np
-from MultiMAP.matrix import MultiGraph, MultiMAP, tfidf
+from MultiMAP.matrix import MultiMAP, tfidf
 #you don't need these if going for MultiMAP.matrix functions
 try:
 	import anndata
