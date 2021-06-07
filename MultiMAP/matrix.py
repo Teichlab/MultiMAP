@@ -3317,16 +3317,14 @@ def MultiMAP(Xs,
     -----
     Xs : list of ``np.array``
         The dimensionality reductions of the datasets to integrate, observations as rows.
+        >>> Xs = [DR_A, DR_B, DR_C]
     joint : dict of ``np.array``
         The joint dimensionality reductions generated for all pair combinations of the input 
         datasets. The keys are to be two-integer tuples, specifying the indices of the two
         datasets in ``Xs``
+        >>> joint = {(0,1):DR_AB, (0,2):DR_AC, (1,2):DR_BC}
     graph_only : ``bool``, optional (default: ``False``)
         If ``True``, skip producing the embedding and only return the neighbour graph.
-    
-    For three input datasets A, B, C:
-    >>> Xs = [DR_A, DR_B, DR_C]
-    >>> joint = {(0,1):DR_AB, (0,2):DR_AC, (1,2):DR_BC}
     
     All other arguments as described in ``MultiMAP.Integration()``.
     '''
