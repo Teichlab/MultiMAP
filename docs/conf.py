@@ -16,8 +16,7 @@ sys.path.insert(0, os.path.abspath('..'))
 autodoc_mock_imports = ['anndata','scanpy','numpy','scipy','numba','scipy.optimize',
 						'sklearn.neighbors','sklearn.metrics','warnings','scipy.sparse',
 						'locale','sklearn.utils','annoy','faiss','scipy.sparse.csgraph',
-						'sklearn.metrics','FeatureHasher','sklearn.manifold',
-						'sklearn.feature_extraction.text.FeatureHasher']
+						'sklearn.metrics','FeatureHasher','sklearn.manifold','sklearn']
 
 # -- Project information -----------------------------------------------------
 
