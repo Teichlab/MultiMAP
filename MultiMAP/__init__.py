@@ -36,7 +36,7 @@ def TFIDF_LSI(adata, n_comps=50, binarize=True, random_state=0):
 	else:
 		adata.obsm['X_lsi'] = tfidf(adata.X, n_components=n_comps, binarize=binarize, random_state=random_state)
 
-def Wrapper(flagged, use_reps, embedding, **kwargs):
+def Wrapper(flagged, use_reps, embedding, seed, **kwargs):
 	'''
 	A function that computes the paired PCAs between the datasets to integrate, calls MultiMAP
 	proper, and returns a  (parameters, connectivities, embedding) tuple. Embedding optional
@@ -80,6 +80,9 @@ def Wrapper(flagged, use_reps, embedding, **kwargs):
 	for adata, use_rep in zip(flagged, use_reps):
 		Xs.append(adata.obsm[use_rep])
 	
+	#set seed
+	np.random.seed(seed)
+	
 	#and with that, we're now truly free to call the MultiMAP function
 	#need to negate embedding and provide that as graph_only for the function to understand
 	mmp = MultiMAP(Xs=Xs, joint=joint, graph_only=(not embedding), **kwargs)
@@ -87,7 +90,7 @@ def Wrapper(flagged, use_reps, embedding, **kwargs):
 	#and that's it. spit this out for the other wrappers to use however
 	return mmp
 
-def Integration(adatas, use_reps, scale=True, embedding=True, **kwargs):
+def Integration(adatas, use_reps, scale=True, embedding=True, seed=0, **kwargs):
 	'''
 	Run MultiMAP to integrate a number of AnnData objects from various multi-omics experiments
 	into a single joint dimensionally reduced space. Returns a joint object with the resulting 
@@ -118,6 +121,8 @@ def Integration(adatas, use_reps, scale=True, embedding=True, **kwargs):
 		defaults to 15 times the number of input datasets.
 	n_components : ``int`` (default: 2)
 		The number of dimensions of the MultiMAP embedding.
+	seed : ``int`` (default: 0)
+		RNG seed.
 	strengths: ``list`` of ``float`` or ``None`` (default: ``None``)
 		The relative contribution of each dataset to the layout of the embedding. The 
 		higher the strength the higher the weighting of its cross entropy in the layout loss. 
@@ -184,7 +189,7 @@ def Integration(adatas, use_reps, scale=True, embedding=True, **kwargs):
 		flagged[-1].obs['multimap_index'] = i
 	
 	#call the wrapper. returns (params, connectivities, embedding), with embedding optional
-	mmp = Wrapper(flagged=flagged, use_reps=use_reps, embedding=embedding, **kwargs)
+	mmp = Wrapper(flagged=flagged, use_reps=use_reps, embedding=embedding, seed=seed, **kwargs)
 	
 	#make one happy collapsed object and shove the stuff in correct places
 	#outer join to capture as much gene information as possible for annotation
@@ -202,7 +207,7 @@ def Integration(adatas, use_reps, scale=True, embedding=True, **kwargs):
 	adata.uns['neighbors']['connectivities_key'] = 'connectivities'
 	return adata
 
-def Batch(adata, batch_key='batch', scale=True, embedding=True, dimred_func=None, rep_name='X_pca', **kwargs):
+def Batch(adata, batch_key='batch', scale=True, embedding=True, seed=0, dimred_func=None, rep_name='X_pca', **kwargs):
 	'''
 	Run MultiMAP to correct batch effect within a single AnnData object. Loses the flexibility 
 	of individualised dimensionality reduction choices, but doesn't require a list of separate 
@@ -242,6 +247,7 @@ def Batch(adata, batch_key='batch', scale=True, embedding=True, dimred_func=None
 	#so what needs to happen is the object needs to be partitioned up, have DR ran,
 	#and passed as a list to the wrapper function
 	flagged = []
+	flagged_ids = []
 	use_reps = []
 	for i,batch in enumerate(np.unique(adata.obs[batch_key])):
 		#extract the single batch data
@@ -255,16 +261,25 @@ def Batch(adata, batch_key='batch', scale=True, embedding=True, dimred_func=None
 		flagged[-1].obs['multimap_index'] = i
 		#and add an entry to the list of .obsm keys for the other function
 		use_reps.append(rep_name)
+		#and store the cell name ordering for later
+		flagged_ids = flagged_ids + list(flagged[-1].obs_names)
 	
 	#call the wrapper. returns (params, connectivities, embedding), with embedding optional
-	mmp = Wrapper(flagged=flagged, use_reps=use_reps, embedding=embedding, **kwargs)
+	mmp = Wrapper(flagged=flagged, use_reps=use_reps, embedding=embedding, seed=seed, **kwargs)
+	
+	#this output has the cells ordered as a concatenation of the individual flagged objects
+	#so need to figure out how to reorder the output to get the original cell order
+	#doing the following operation sets the desired order to adata.obs_names
+	#and checks the index for each in flagged_ids
+	#so taking something in flagged_ids order and using sort_order on it will match obs_names
+	sort_order = [flagged_ids.index(i) for i in list(adata.obs_names)]
 	
 	#stick stuff where it's supposed to go
 	if embedding:
-		adata.obsm['X_multimap'] = mmp[2]
+		adata.obsm['X_multimap'] = mmp[2][sort_order,:]
 	#the graph is weighted, the higher the better, 1 best. sounds similar to connectivities
 	#TODO: slot distances into .obsp['distances']
-	adata.obsp['connectivities'] = mmp[1]
+	adata.obsp['connectivities'] = mmp[1][sort_order,:][:,sort_order]
 	#set up .uns['neighbors'], setting method to umap as these are connectivities
 	adata.uns['neighbors'] = {}
 	adata.uns['neighbors']['params'] = mmp[0]
