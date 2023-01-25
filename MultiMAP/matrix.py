@@ -2191,11 +2191,6 @@ from sklearn.metrics import pairwise_distances
 from sklearn.utils import check_random_state
 from sklearn.neighbors import KDTree
 from scipy.spatial import cKDTree
-from annoy import AnnoyIndex
-try:
-    import faiss
-except ImportError:
-    pass
 
 
 
@@ -2484,38 +2479,16 @@ def compute_membership_strengths(
 
     return rows, cols, vals
 
-def create_tree(data, metric, approx=True, use_faiss=True, n_trees=10):
-    if approx:
-        ckd = AnnoyIndex(data.shape[1], metric=metric)
-        for i in np.arange(data.shape[0]):
-            ckd.add_item(i, data[i,:])
-        ckd.build(n_trees)
-    elif metric == 'euclidean':
-        if 'faiss' in sys.modules and use_faiss:
-            ckd = faiss.IndexFlatL2(data.shape[1])
-            ckd.add(data)
-        else:
-            ckd = cKDTree(data)
+def create_tree(data, metric):
+    if metric == 'euclidean':
+        ckd = cKDTree(data)
     else:
         ckd = KDTree(data, metric=metric)
     return ckd
 
-def query_tree(data, ckd, k, metric, approx=True, use_faiss=True):
-    if approx:
-        ckdo_ind = []
-        ckdo_dist = []
-        for i in np.arange(data.shape[0]):
-            holder = ckd.get_nns_by_vector(data[i,:], k, include_distances=True)
-            ckdo_ind.append(holder[0])
-            ckdo_dist.append(holder[1])
-        ckdout = (np.asarray(ckdo_dist), np.asarray(ckdo_ind))
-    elif metric == 'euclidean':
-        if 'faiss' in sys.modules and use_faiss:
-            D, I = ckd.search(data, k)
-            D[D<0] = 0
-            ckdout = (np.sqrt(D), I)
-        else:
-            ckdout = ckd.query(x=data, k=k, n_jobs=-1)
+def query_tree(data, ckd, k, metric):
+    if metric == 'euclidean':
+        ckdout = ckd.query(x=data, k=k, workers=-1)
     else:
         ckdout = ckd.query(data, k=k)
     return ckdout
@@ -2762,7 +2735,7 @@ def clip(val):
     locals={
         "result": numba.types.float32,
         "diff": numba.types.float32,
-        "dim": numba.types.int32,
+        "dim": numba.types.intp,
     },
 )
 def rdist(x, y):
